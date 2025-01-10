@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>Falcon | Dashboard &amp; Web App Template</title>
+
+    <!-- ===============================================-->
+    <!--    Favicons-->
+    <!-- ===============================================-->
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/img/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/img/favicons/favicon-16x16.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../assets/img/favicons/favicon.ico">
+    <link rel="manifest" href="../assets/img/favicons/manifest.json">
+    <meta name="msapplication-TileImage" content="../assets/img/favicons/mstile-150x150.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="../assets/js/config.js"></script>
+    <script src="../vendors/overlayscrollbars/OverlayScrollbars.min.js"></script>
+
+    <!-- ===============================================-->
+    <!--    Stylesheets-->
+    <!-- ===============================================-->
+    <link href="../vendors/prism/prism-okaidia.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
+    <link href="../vendors/overlayscrollbars/OverlayScrollbars.min.css" rel="stylesheet">
+    <link href="../assets/css/theme-rtl.min.css" rel="stylesheet" id="style-rtl">
+    <link href="../assets/css/theme.min.css" rel="stylesheet" id="style-default">
+    <link href="../assets/css/user-rtl.min.css" rel="stylesheet" id="user-style-rtl">
+    <link href="../assets/css/user.min.css" rel="stylesheet" id="user-style-default">
+    <script>
+      var isRTL = JSON.parse(localStorage.getItem('isRTL'));
+      if (isRTL) {
+        var linkDefault = document.getElementById('style-default');
+        var userLinkDefault = document.getElementById('user-style-default');
+        linkDefault.setAttribute('disabled', true);
+        userLinkDefault.setAttribute('disabled', true);
+        document.querySelector('html').setAttribute('dir', 'rtl');
+      } else {
+        var linkRTL = document.getElementById('style-rtl');
+        var userLinkRTL = document.getElementById('user-style-rtl');
+        linkRTL.setAttribute('disabled', true);
+        userLinkRTL.setAttribute('disabled', true);
+      }
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #444;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            margin-bottom: 15px;
+        }
+        .kpi {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.5s ease;
+        }
+        .kpi.highlight {
+            background-color: #ffeb3b;
+        }
+        .lecture {
+            font-weight: bold;
+            color: #555;
+        }
+        .action {
+            margin-top: 5px;
+            color: #333;
+        }
+      </style>
+  </head>
+
+  <body>
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+      <div class="container" data-layout="container">
+        <div class="container">
+          <h1 id="guide">Guide de Lecture des KPI</h1>
+          <p>Pour chaque KPI, voici comment interpréter les résultats et les utiliser dans un contexte décisionnel :</p>
+  
+          <div class="kpi" id="kpi1">
+              <h2>1. Nombre Total d’Avis</h2>
+              <p class="lecture">Lecture : Un chiffre élevé indique un engagement fort, tandis qu'un faible nombre peut signaler un manque de feedback.</p>
+              <p class="action">Action : Si le nombre d'avis diminue, envisager des campagnes pour encourager les retours utilisateurs.</p>
+          </div>
+  
+          <div class="kpi" id="kpi2">
+              <h2>2. Distribution des Notes</h2>
+              <p class="lecture">Lecture : Une majorité de notes élevées (4-5) indique une satisfaction générale, tandis qu'une forte proportion de notes basses (1-2) signale des problèmes.</p>
+              <p class="action">Action : Analyser les avis négatifs pour identifier les causes récurrentes et y remédier.</p>
+          </div>
+  
+          <div class="kpi" id="kpi3">
+              <h2>3. Taux d’Avis Positifs vs Négatifs</h2>
+              <p class="lecture">Lecture : Un équilibre favorable entre positifs et négatifs est idéal. Un taux élevé de négatifs nécessite une attention immédiate.</p>
+              <p class="action">Action : Déployer des mesures correctives ou des améliorations basées sur les avis négatifs.</p>
+          </div>
+  
+          <div class="kpi" id="kpi4">
+              <h2>4. Note Moyenne par Période</h2>
+              <p class="lecture">Lecture : Une tendance à la hausse suggère des améliorations, tandis qu'une tendance à la baisse peut indiquer des problèmes croissants.</p>
+              <p class="action">Action : Investiguer les périodes de baisse pour identifier les causes et intervenir rapidement.</p>
+          </div>
+  
+          <div class="kpi" id="kpi5">
+              <h2>5. Avis par Version de l’Application</h2>
+              <p class="lecture">Lecture : Des notes faibles ou un grand nombre d’avis négatifs pour une version spécifique peuvent indiquer des bugs ou des fonctionnalités problématiques.</p>
+              <p class="action">Action : Prioriser les correctifs pour les versions les plus critiquées.</p>
+          </div>
+  
+          <div class="kpi" id="kpi6">
+              <h2>6. Popularité des Avis via thumbsUpCount</h2>
+              <p class="lecture">Lecture : Les avis avec un grand nombre de likes sont souvent considérés comme utiles ou représentatifs des expériences des utilisateurs.</p>
+              <p class="action">Action : Mettre en avant ces avis pour une analyse plus approfondie ou pour les utiliser comme témoignages.</p>
+          </div>
+  
+          <div class="kpi" id="kpi7">
+              <h2>7. Sentiment Moyenne Combiné</h2>
+              <p class="lecture">Lecture : Un score combiné positif indique une satisfaction générale, tandis qu'un score négatif indique des préoccupations.</p>
+              <p class="action">Action : Utiliser ce KPI pour une vue d’ensemble de la perception utilisateur et ajuster les stratégies en conséquence.</p>
+          </div>
+  
+          <div class="kpi" id="kpi8">
+              <h2>8. Analyse Textuelle des Avis</h2>
+              <p class="lecture">Lecture : Les mots fréquents dans les avis positifs peuvent révéler les points forts, tandis que ceux dans les avis négatifs signalent les domaines à améliorer.</p>
+              <p class="action">Action : Focaliser les efforts d’amélioration sur les mots/clés récurrents négatifs identifiés.</p>
+          </div>
+  
+          <div class="kpi" id="kpi9">
+              <h2>9. Moyenne des "Thumbs Up" par Catégorie de Sentiment</h2>
+              <p class="lecture">Lecture : Une moyenne élevée de likes pour les avis positifs montre une forte approbation, tandis que des likes élevés sur des avis négatifs signalent des préoccupations importantes.</p>
+              <p class="action">Action : Traiter en priorité les avis négatifs très likés pour résoudre les problèmes critiques.</p>
+          </div>
+  
+          <div class="kpi" id="kpi10">
+              <h2>10. Fréquence des Avis par Heure de la Journée</h2>
+              <p class="lecture">Lecture : Identifier les heures de pointe où les avis sont le plus nombreux.</p>
+              <p class="action">Action : Planifier des mises à jour ou des interventions techniques durant les périodes de moindre activité pour minimiser l'impact.</p>
+          </div>
+  
+          <div class="kpi" id="kpi11">
+              <h2>11. Top Utilisateurs par Nombre d’Avis</h2>
+              <p class="lecture">Lecture : Identifier les utilisateurs très actifs peut aider à reconnaître les utilisateurs engagés ou à surveiller les comportements inhabituels.</p>
+              <p class="action">Action : Engager les utilisateurs les plus actifs pour obtenir des insights détaillés ou offrir des récompenses.</p>
+          </div>
+  
+          <div class="kpi" id="kpi12">
+              <h2>12. Corrélation Entre Note et "Thumbs Up Count"</h2>
+              <p class="lecture">Lecture : Une corrélation positive indique que les avis bien notés sont également appréciés, tandis qu'une faible corrélation peut signaler des avis polarisants.</p>
+              <p class="action">Action : Mettre en avant les avis qui sont à la fois bien notés et très likés pour leur valeur informative.</p>
+          </div>
+  
+          <div class="kpi" id="kpi13">
+              <h2>13. Avis par Utilisateur</h2>
+              <p class="lecture">Lecture : Comprendre combien d’avis chaque utilisateur laisse peut aider à identifier les utilisateurs engagés ou les anomalies.</p>
+              <p class="action">Action : Engager les utilisateurs très actifs pour des feedbacks approfondis ou surveiller les comportements répétitifs négatifs.</p>
+          </div>
+  
+          <div class="kpi" id="kpi14">
+              <h2>14. Note Moyenne par Utilisateur</h2>
+              <p class="lecture">Lecture : Analyser la moyenne des scores attribués par chaque utilisateur permet de repérer les utilisateurs très satisfaits ou insatisfaits.</p>
+              <p class="action">Action : Cibler les utilisateurs insatisfaits pour des actions correctives ou valoriser les utilisateurs satisfaits pour des témoignages.</p>
+          </div>
+  
+          <div class="kpi" id="kpi15">
+              <h2>15. Tendances de Sentiment par Version de l’Application</h2>
+              <p class="lecture">Lecture : Une tendance négative pour une version particulière indique des problèmes spécifiques introduits par cette version.</p>
+              <p class="action">Action : Déployer rapidement des correctifs ou ajustements pour les versions identifiées comme problématiques.</p>
+          </div>
+      </div>
+
+
+
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const highlightSection = () => {
+                const hash = window.location.hash;
+                if (hash) {
+                    const target = document.querySelector(hash);
+                    if (target) {
+                        target.classList.add("highlight");
+                        setTimeout(() => {
+                            target.classList.remove("highlight");
+                        }, 2000);
+
+                        setTimeout(() => {
+                            target.classList.add("highlight");
+                        }, 3000);
+
+                        setTimeout(() => {
+                            target.classList.remove("highlight");
+                        }, 4000);
+                    }
+                }
+            };
+            highlightSection();
+            window.addEventListener("hashchange", highlightSection);
+        });
+      </script>
+    <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
+    <script src="../vendors/popper/popper.min.js"></script>
+    <script src="../vendors/bootstrap/bootstrap.min.js"></script>
+    <script src="../vendors/anchorjs/anchor.min.js"></script>
+    <script src="../vendors/is/is.min.js"></script>
+    <script src="../vendors/prism/prism.js"></script>
+    <script src="../vendors/fontawesome/all.min.js"></script>
+    <script src="../vendors/lodash/lodash.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+    <script src="../vendors/list.js/list.min.js"></script>
+    <script src="../assets/js/theme.js"></script>
+  </body>
+
+</html>

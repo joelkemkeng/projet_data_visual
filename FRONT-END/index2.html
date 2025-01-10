@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Uber KPI</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    /* Styles pour améliorer l'apparence des graphiques */
+    .chart-container {
+      position: relative;
+      margin: auto;
+      height: 400px;
+      width: 80%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <h1 class="mb-4">Dashboard des KPI Uber</h1>
+    
+    <!-- Nombre Total d’Avis -->
+    <div class="mb-4">
+      <h3>Nombre Total d’Avis</h3>
+      <p id="totalReviews" style="font-size: 2em;">Chargement...</p>
+    </div>
+    
+    <!-- Distribution des Notes -->
+    <div class="mb-4">
+      <h3>Distribution des Notes</h3>
+      <div class="chart-container">
+        <canvas id="scoreDistributionChart"></canvas>
+      </div>
+    </div>
+    
+    <!-- Taux d’Avis Positifs vs Négatifs -->
+    <div class="mb-4">
+      <h3>Taux d’Avis Positifs vs Négatifs</h3>
+      <div class="chart-container">
+        <canvas id="sentimentRatioChart"></canvas>
+      </div>
+    </div>
+    
+    <!-- Note Moyenne par Période -->
+    <div class="mb-4">
+      <h3>Note Moyenne par Mois</h3>
+      <div class="chart-container">
+        <canvas id="averageScoreOverTimeChart"></canvas>
+      </div>
+    </div>
+    
+    <!-- Avis par Version de l’Application -->
+    <div class="mb-4">
+      <h3>Avis par Version de l’Application</h3>
+      <div class="chart-container">
+        <canvas id="reviewsByVersionChart"></canvas>
+      </div>
+    </div>
+    
+    <!-- Popularité des Avis via Thumbs Up -->
+    <div class="mb-4">
+      <h3>Popularité des Avis via Thumbs Up</h3>
+      <div class="chart-container">
+        <canvas id="thumbsUpDistributionChart"></canvas>
+      </div>
+    </div>
+    
+    <!-- Sentiment Moyenne Combiné -->
+    <div class="mb-4">
+      <h3>Sentiment Moyenne Combiné</h3>
+      <div class="chart-container">
+        <canvas id="combinedSentimentAverageChart"></canvas>
+      </div>
+    </div>
+    
+    <!-- Analyse Textuelle des Avis Positifs -->
+    <div class="mb-4">
+      <h3>Mots les Plus Fréquents dans les Avis Positifs</h3>
+      <div class="chart-container">
+        <canvas id="positiveWordCloud"></canvas>
+      </div>
+    </div>
+    
+    <!-- Analyse Textuelle des Avis Négatifs -->
+    <div class="mb-4">
+      <h3>Mots les Plus Fréquents dans les Avis Négatifs</h3>
+      <div class="chart-container">
+        <canvas id="negativeWordCloud"></canvas>
+      </div>
+    </div>
+    
+    <!-- Fréquence des Avis par Heure de la Journée -->
+    <div class="mb-4">
+      <h3>Fréquence des Avis par Heure de la Journée</h3>
+      <div class="chart-container">
+        <canvas id="reviewFrequencyByHourChart"></canvas>
+      </div>
+    </div>
+    
+    <!-- Top Utilisateurs par Nombre d’Avis -->
+    <div class="mb-4">
+      <h3>Top Utilisateurs par Nombre d’Avis</h3>
+      <div class="chart-container">
+        <canvas id="topUsersByReviewsChart"></canvas>
+      </div>
+    </div>
+    
+    <!-- Corrélation Entre Note et Thumbs Up Count -->
+    <div class="mb-4">
+      <h3>Corrélation Entre Note et Thumbs Up Count</h3>
+      <div class="chart-container">
+        <canvas id="scoreThumbsCorrelationChart"></canvas>
+      </div>
+    </div>
+    
+    <!-- Note Moyenne par Utilisateur -->
+    <div class="mb-4">
+      <h3>Note Moyenne par Utilisateur</h3>
+      <div class="chart-container">
+        <canvas id="averageScorePerUserChart"></canvas>
+      </div>
+    </div>
+    
+    <!-- Tendances de Sentiment par Version de l’Application -->
+    <div class="mb-4">
+      <h3>Tendances de Sentiment par Version de l’Application</h3>
+      <div class="chart-container">
+        <canvas id="sentimentTrendsByVersionChart"></canvas>
+      </div>
+    </div>
+    
+  </div>
+
+  <!-- Inclusion de Chart.js et WordCloud2.js via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.1.2/src/wordcloud2.js"></script>
+  
+  <script>
+    // Fonction pour charger le nombre total d'avis
+    fetch('http://127.0.0.1:8000/total_reviews')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('totalReviews').innerText = data.total_reviews;
+      })
+      .catch(error => console.error('Erreur:', error));
+
+    // Fonction pour charger la distribution des scores
+    fetch('http://127.0.0.1:8000/score_distribution')
+      .then(response => response.json())
+      .then(data => {
+        const labels = data.map(item => `Étoile ${item.score}`);
+        const values = data.map(item => item.count);
+        
+        new Chart(document.getElementById('scoreDistributionChart'), {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Nombre d\'Avis',
+              data: values,
+              backgroundColor: 'rgba(54, 162, 235, 0.6)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: { beginAtZero: true, precision: 0 }
+            }
+          }
+        });
+      })
+      .catch(error => console.error('Erreur:', error));
+
+    // Fonction pour charger le taux d'avis positifs vs négatifs
+    fetch('http://127.0.0.1:8000/sentiment_ratio')
+      .then(response => response.json())
+      .then(data => {
+        const labels = Object.keys(data);
+        const values = Object.values(data);
+        
+        new Chart(document.getElementById('sentimentRatioChart'), {
+          type: 'pie',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: values,
+              backgroundColor: [
+                'rgba(75, 192, 192, 0.6)', // Positive
+                'rgba(255, 99, 132, 0.6)', // Negative
+                'rgba(201, 203, 207, 0.6)'  // Neutral
+              ],
+              borderColor: [
+                'rgba(75, 192, 192, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(201, 203, 207, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {}
+        });
+      })
+      .catch(error => console.error('Erreur:', error));
+
+    // Fonction pour charger la note moyenne par période
+    fetch('http://127.0.0.1:8000/average_score_over_time?freq=M')
+      .then(response => response.json())
+      .then(data => {
+        const labels = data.map(item => item.at.slice(0, 7)); // Format YYYY-MM
+        const values = data.map(item => parseFloat(item.average_score.toFixed(2)));
+        
+        new Chart(document.getElementById('averageScoreOverTimeChart'), {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Note Moyenne',
+              data: values,
+              fill: true,
+              backgroundColor: 'rgba(153, 102, 255, 0.2)',
+              borderColor: 'rgba(153, 102, 255, 1)',
+              tension: 0.1
+            }]
+          },
+          options: {
+            scales: {
+              y: { beginAtZero: true, max: 5 }
+            }
+          }
+        });
+      })
+      .catch(error => console.error('Erreur:', error));
+
+    // Fonction pour charger les avis par version de l'application
+    fetch('http://127.0.0.1:8000/reviews_by_version')
+      .then(response => response.json())
+      .then(data => {
+        const labels = data.map(item => item.reviewCreatedVersion);
+        const reviewCounts = data.map(item => item.review_count);
+        const averageScores = data.map(item => parseFloat(item.average_score.toFixed(2)));
+        
+        new Chart(document.getElementById('reviewsByVersionChart'), {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: 'Nombre d\'Avis',
+                data: reviewCounts,
+                backgroundColor: 'rgba(255, 206, 86, 0.6)',
+                borderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 1
+              },
+              {
+                label: 'Note Moyenne',
+                data: averageScores,
+                type: 'line',
+                fill: false,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                yAxisID: 'y-axis-2'
+              }
+            ]
+          },
+          options: {
+            scales: {
+              y: { 
+                beginAtZero: true,
+                position: 'left',
+                title: {
+                  display: true,
+                  text: 'Nombre d\'Avis'
+                }
+              },
+              'y-axis-2': {
+                beginAtZero: true,
+                position: 'right',
+                title: {
+                  display: true,
+                  text: 'Note Moyenne'
+                },
+                grid: { drawOnChartArea: false }
+              }
+            }
+          }
+        });
+      })
+      .catch(error => console.error('Erreur:', error));
+
+    // Fonction pour charger la distribution des "Thumbs Up"
+    fetch('http://127.0.0.1:8000/thumbs_up_distribution')
+      .then(response => response.json())
+      .then(data => {
+        const labels = data.map(item => item.thumbsUpCount);
+        const values = data.map(item => item.count);
+        
+        new Chart(document.getElementById('thumbsUpDistributionChart'), {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Nombre d\'Avis',
+              data: values,
+              backgroundColor: 'rgba(255, 159, 64, 0.6)',
+              borderColor: 'rgba(255, 159, 64, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: { beginAtZero: true, precision: 0 }
+            }
+          }
+        });
+      })
+      .catch(error => console.error('Erreur:', error));
+
+    // Fonction pour charger le sentiment moyen combiné
+    fetch('http://127.0.0.1:8000/combined_sentiment_average')
+      .then(response => response.json())
+      .then(data => {
+        const ctx = document.getElementById('combinedSentimentAverageChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Positive', 'Négative'],
+            datasets: [{
+              data: [data.average_combined_score, 5 - data.average_combined_score],
+              backgroundColor: [
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(255, 99, 132, 0.6)'
+              ],
+              borderColor: [
+                'rgba(75, 192, 192, 1)',
+                'rgba(255, 99, 132, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    return context.label + ': ' + context.parsed.toFixed(2);
+                  }
+                }
+              }
+            }
+          }
+        });
+      })
+      .catch(error => console.error('Erreur:', error));
+
+    // Fonction pour charger les mots les plus fréquents dans les avis positifs
+    fetch('http://127.0.0.1:8000/most_common_words?sentiment=positive&top_n=20')
+      .then(response => response.json())
+      .then(data => {
+        const words = data.common_words.map(item => [item[0], item[1]]);
+        WordCloud(document.getElementById('positiveWordCloud'), { list: words, gridSize: 18, weightFactor: 10, backgroundColor: '#f0f0f0' });
+      })
+      .catch(error => console.error('Erreur:', error));
+
+    // Fonction pour charger les mots les plus fréquents dans les avis négatifs
+    fetch('http://127.0.0.1:8000/most_common_words?sentiment=negative&top_n=20')
+      .then(response => response.json())
+      .then(data => {
+        const words = data.common_words.map(item => [item[0], item[1]]);
+        WordCloud(document.getElementById('negativeWordCloud'), { list: words, gridSize: 18, weightFactor: 10, backgroundColor: '#f8d7da' });
+      })
+      .catch(error => console.error('Erreur:', error));
+
+    // Fonction pour charger la fréquence des avis par heure de la journée
+    fetch('http://127.0.0.1:8000/review_frequency_by_hour')
+      .then(response => response.json())
+      .then(data => {
+        const labels = data.map(item => `${item.hour}:00`);
+        const values = data.map(item => item.review_count);
+        
+        new Chart(document.getElementById('reviewFrequencyByHourChart'), {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Nombre d\'Avis',
+              data: values,
+              backgroundColor: 'rgba(255, 99, 132, 0.6)',
+              borderColor: 'rgba(255, 99, 132, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: { beginAtZero: true, precision: 0 },
+              x: { title: { display: true, text: 'Heure de la Journée' } }
+            }
+          }
+        });
+      })
+      .catch(error => console.error('Erreur:', error));
+
+    // Fonction pour charger les top utilisateurs par nombre d'avis
+    fetch('http://127.0.0.1:8000/top_users_by_reviews?top_n=10')
+      .then(response => response.json())
+      .then(data => {
+        const labels = data.map(item => item.userName);
+        const values = data.map(item => item.review_count);
+        
+        new Chart(document.getElementById('topUsersByReviewsChart'), {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Nombre d\'Avis',
+              data: values,
+              backgroundColor: 'rgba(54, 162, 235, 0.6)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            indexAxis: 'y', // Pour un graphique horizontal
+            scales: {
+              x: { beginAtZero: true, precision: 0 },
+              y: { title: { display: false } }
+            }
+          }
+        });
+      })
+      .catch(error => console.error('Erreur:', error));
+
+    // Fonction pour charger la corrélation entre score et thumbsUpCount
+    fetch('http://127.0.0.1:8000/score_thumbs_correlation')
+      .then(response => response.json())
+      .then(data => {
+        const ctx = document.getElementById('scoreThumbsCorrelationChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'scatter',
+          data: {
+            datasets: [{
+              label: 'Corrélation entre Score et Thumbs Up Count',
+              data: [
+                { x: 1, y: data.score_thumbs_correlation },
+                { x: 2, y: data.score_thumbs_correlation },
+                { x: 3, y: data.score_thumbs_correlation },
+                { x: 4, y: data.score_thumbs_correlation },
+                { x: 5, y: data.score_thumbs_correlation },
+              ],
+              backgroundColor: 'rgba(255, 99, 132, 0.6)',
+            }]
+          },
+          options: {
+            scales: {
+              x: { 
+                title: { display: true, text: 'Score' },
+                beginAtZero: true,
+                max: 5
+              },
+              y: { 
+                title: { display: true, text: 'Thumbs Up Count' },
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      })
+      .catch(error => console.error('Erreur:', error));
+
+    // Fonction pour charger la note moyenne par utilisateur
+    fetch('http://127.0.0.1:8000/average_score_per_user')
+      .then(response => response.json())
+      .then(data => {
+        // Sélectionner les 10 premiers utilisateurs avec les meilleures moyennes
+        const topPositiveUsers = data.sort((a, b) => b.average_score - a.average_score).slice(0, 10);
+        const labels = topPositiveUsers.map(item => item.userName);
+        const values = topPositiveUsers.map(item => parseFloat(item.average_score.toFixed(2)));
+        
+        new Chart(document.getElementById('averageScorePerUserChart'), {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Note Moyenne',
+              data: values,
+              backgroundColor: 'rgba(75, 192, 192, 0.6)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            indexAxis: 'y', // Pour un graphique horizontal
+            scales: {
+              x: { beginAtZero: true, max: 5 },
+              y: { title: { display: false } }
+            }
+          }
+        });
+      })
+      .catch(error => console.error('Erreur:', error));
+
+    // Fonction pour charger les tendances de sentiment par version de l'application
+    fetch('http://127.0.0.1:8000/sentiment_trends_by_version?freq=M')
+      .then(response => response.json())
+      .then(data => {
+        // Filtrer les données par sentiment
+        const positiveData = data.filter(item => item.sentiment === 'positive');
+        const negativeData = data.filter(item => item.sentiment === 'negative');
+        const neutralData = data.filter(item => item.sentiment === 'neutral');
+        
+        // Extraire les labels (versions)
+        const versions = [...new Set(data.map(item => item.reviewCreatedVersion))];
+        
+        // Organiser les données par version
+        const sentimentCounts = {
+          positive: [],
+          negative: [],
+          neutral: []
+        };
+        
+        versions.forEach(version => {
+          const pos = positiveData.filter(item => item.reviewCreatedVersion === version).reduce((sum, item) => sum + item.count, 0);
+          const neg = negativeData.filter(item => item.reviewCreatedVersion === version).reduce((sum, item) => sum + item.count, 0);
+          const neu = neutralData.filter(item => item.reviewCreatedVersion === version).reduce((sum, item) => sum + item.count, 0);
+          
+          sentimentCounts.positive.push(pos);
+          sentimentCounts.negative.push(neg);
+          sentimentCounts.neutral.push(neu);
+        });
+        
+        new Chart(document.getElementById('sentimentTrendsByVersionChart'), {
+          type: 'bar',
+          data: {
+            labels: versions,
+            datasets: [
+              {
+                label: 'Positive',
+                data: sentimentCounts.positive,
+                backgroundColor: 'rgba(75, 192, 192, 0.6)'
+              },
+              {
+                label: 'Negative',
+                data: sentimentCounts.negative,
+                backgroundColor: 'rgba(255, 99, 132, 0.6)'
+              },
+              {
+                label: 'Neutral',
+                data: sentimentCounts.neutral,
+                backgroundColor: 'rgba(201, 203, 207, 0.6)'
+              }
+            ]
+          },
+          options: {
+            scales: {
+              x: { stacked: true },
+              y: { stacked: true, beginAtZero: true }
+            }
+          }
+        });
+      })
+      .catch(error => console.error('Erreur:', error));
+  </script>
+</body>
+</html>

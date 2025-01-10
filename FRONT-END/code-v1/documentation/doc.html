@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Falcon | Dashboard &amp; Web App Template</title>
+
+    <link href="../vendors/prism/prism-okaidia.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
+
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          margin: 0;
+          padding: 0;
+          background-color: #f4f4f4;
+          color: #333;
+      }
+      .container {
+          max-width: 800px;
+          margin: auto;
+          padding: 20px;
+          background: #fff;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
+      h1, h2 {
+          color: #444;
+      }
+      h1 {
+          text-align: center;
+          margin-bottom: 20px;
+      }
+      ul {
+          list-style: none;
+          padding: 0;
+      }
+      ul li {
+          margin-bottom: 15px;
+      }
+      .kpi {
+          margin-bottom: 20px;
+          padding-bottom: 15px;
+          border-bottom: 1px solid #ddd;
+          transition: background-color 0.5s ease;
+      }
+      .kpi.highlight {
+          background-color: #ffeb3b;
+      }
+      .lecture {
+          font-weight: bold;
+          color: #555;
+      }
+      .action {
+          margin-top: 5px;
+          color: #333;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="main" id="top">
+      <div class="container" data-layout="container">
+        <div class="container">
+          <h1 id="guide">Guide de Lecture des KPI</h1>
+          <p>Pour chaque KPI, voici comment interpréter les résultats et les utiliser dans un contexte décisionnel :</p>
+  
+          <div class="kpi" id="kpi1">
+              <h2>1. Nombre Total d’Avis</h2>
+              <p class="lecture">Lecture : Un chiffre élevé indique un engagement fort, tandis qu'un faible nombre peut signaler un manque de feedback.</p>
+              <p class="action">Action : Si le nombre d'avis diminue, envisager des campagnes pour encourager les retours utilisateurs.</p>
+          </div>
+  
+          <div class="kpi" id="kpi2">
+              <h2>2. Distribution des Notes</h2>
+              <p class="lecture">Lecture : Une majorité de notes élevées (4-5) indique une satisfaction générale, tandis qu'une forte proportion de notes basses (1-2) signale des problèmes.</p>
+              <p class="action">Action : Analyser les avis négatifs pour identifier les causes récurrentes et y remédier.</p>
+          </div>
+  
+          <div class="kpi" id="kpi3">
+              <h2>3. Taux d’Avis Positifs vs Négatifs</h2>
+              <p class="lecture">Lecture : Un équilibre favorable entre positifs et négatifs est idéal. Un taux élevé de négatifs nécessite une attention immédiate.</p>
+              <p class="action">Action : Déployer des mesures correctives ou des améliorations basées sur les avis négatifs.</p>
+          </div>
+  
+          <div class="kpi" id="kpi4">
+              <h2>4. Note Moyenne par Période</h2>
+              <p class="lecture">Lecture : Une tendance à la hausse suggère des améliorations, tandis qu'une tendance à la baisse peut indiquer des problèmes croissants.</p>
+              <p class="action">Action : Investiguer les périodes de baisse pour identifier les causes et intervenir rapidement.</p>
+          </div>
+  
+          <div class="kpi" id="kpi5">
+              <h2>5. Avis par Version de l’Application</h2>
+              <p class="lecture">Lecture : Des notes faibles ou un grand nombre d’avis négatifs pour une version spécifique peuvent indiquer des bugs ou des fonctionnalités problématiques.</p>
+              <p class="action">Action : Prioriser les correctifs pour les versions les plus critiquées.</p>
+          </div>
+  
+          <div class="kpi" id="kpi10">
+              <h2>10. Fréquence des Avis par Heure de la Journée</h2>
+              <p class="lecture">Lecture : Identifier les heures de pointe où les avis sont le plus nombreux.</p>
+              <p class="action">Action : Planifier des mises à jour ou des interventions techniques durant les périodes de moindre activité pour minimiser l'impact.</p>
+          </div>
+      </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+          const highlightSection = () => {
+              const hash = window.location.hash;
+              if (hash) {
+                  const target = document.querySelector(hash);
+                  if (target) {
+                      target.classList.add("highlight");
+                      setTimeout(() => {
+                          target.classList.remove("highlight");
+                      }, 1500);
+                  }
+              }
+          };
+          highlightSection();
+          window.addEventListener("hashchange", highlightSection);
+      });
+    </script>
+  </body>
+
+</html>
